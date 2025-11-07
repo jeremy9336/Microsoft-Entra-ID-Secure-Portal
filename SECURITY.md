@@ -2,7 +2,7 @@
 
 This document describes how security issues are handled and reported for the XNALab Entra Secure Portal project.
 
-================================================================================================
+====================
 
 ## Supported Versions
 |---------|-----------------|
@@ -13,7 +13,7 @@ This document describes how security issues are handled and reported for the XNA
 
 Security patches are applied to the most recent release. Older versions may not receive updates.
 
-================================================================================================
+====================
 
 ## Reporting a Vulnerability
 
@@ -29,7 +29,7 @@ Your report should include:
 
 We aim to acknowledge receipt of security reports **within 48 hours** and provide a timeline for investigation and remediation.
 
-================================================================================================
+====================
 
 ## Security Best Practices
 
@@ -40,7 +40,7 @@ For developers deploying or modifying this portal:
 - Rotate certificates regularly (recommended every 12 months).
 - Keep all server software and PHP libraries up to date.
 
-================================================================================================
+====================
 
 ## Responsible Disclosure
 
@@ -49,7 +49,7 @@ XNA Lab follows a Responsible Disclosure Policy:
 - We will coordinate a fix and public disclosure timeline.
 - You will be credited (if desired) in the release notes.
 
-================================================================================================
+====================
 
 ## Additional Resources
 
