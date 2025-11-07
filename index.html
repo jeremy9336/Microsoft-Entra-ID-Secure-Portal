@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--
+===========================================================================
+File: index.html
+Purpose: Public login entry point for the XNALab Entra ID Portal
+Author: Jeremy Rousseau, jeremy9336@gmail.com | Entra Secure Login Project
+Date Created: 2025-11-05
+Version control: [MAJOR.MINOR.PATCH]
+Last Modified: 2025-11-05 
+============================================================================
+CHANGE LOG:
+[YYYY-MM-DD] [vX.X.X] [Initials] - [Description of change]
+2025-11-05 1.0.0 jwr - Intial release
+============================================================================
+
+OVERVIEW:
+ This page is the initial landing screen that users see before authenticating.
+ It provides a single entry button that triggers the OAuth 2.0 / Microsoft Entra
+ sign-in process. Once the button is clicked, the browser is redirected to 
+ `login.php`, which constructs and sends the authorization request to Microsoft.
+
+DESIGN NOTES:
+ - Uses a lightweight structure for quick page load.
+ - Delegates authentication entirely to Microsoft (no credentials handled here).
+ - Styled with `style.css` to match the XNALab design.
+============================================================================
+-->
+  
+  <meta charset="UTF-8">
+  <title>XNALab Entra Login</title>
+
+  <!-- Link to shared stylesheet for consistent branding -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="login-container">
+    
+    <!--
+      Logo / Branding
+      ============================================================================
+      Displays a key or lock icon to reinforce security messaging.
+      The external URL references a stable icons8 CDN source.
+      ============================================================================
+    -->
+    <img src="https://img.icons8.com/ios-filled/100/0078d7/key-security.png"
+         alt="XNALab Logo"
+         class="logo">
+
+    <!--
+      Title and Description
+      ============================================================================
+      Provide clear context for users — they’re entering a secure portal
+      and must authenticate with Microsoft Entra ID.
+      ============================================================================
+    -->
+    <h1>Welcome to XNA Lab Portal</h1>
+    <p>Sign in securely using your Microsoft Entra ID.</p>
+    <!--
+      Sign-In Button
+      ============================================================================
+      Clicking this link redirects to `login.php`, which:
+        - Constructs an OAuth 2.0 authorization URL.
+        - Redirects the user to Microsoft Entra’s hosted login page.
+      When successful, Microsoft redirects back to your `auth_callback.php`
+      with an authorization code.
+
+      SECURITY:
+        - No local credentials collected.
+        - The `login.php` script defines all OAuth parameters server-side.
+      ============================================================================
+    -->
+    <a class="login-button" href="login.php">Sign in with Microsoft</a>
+  </div>
+</body>
+</html>
