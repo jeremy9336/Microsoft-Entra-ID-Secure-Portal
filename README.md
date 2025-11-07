@@ -22,7 +22,6 @@ Implements modern OAuth 2.0 authorization with certificate-based client assertio
  - Organizations and developers integrating PHP web applications with Microsoft Entra ID who need enterprise-grade security and reliability without external dependencies.
 
 ## File Structure
-| ------------------------ | -------------------------------------------- |
 | File                     | Description                                  |
 | ------------------------ | -------------------------------------------- |
 | index.html               | Login landing page                           |
@@ -38,21 +37,7 @@ Implements modern OAuth 2.0 authorization with certificate-based client assertio
 | style.css                | Unified light/dark theme UI styling          |
 
 ## Directory Structure
-│
-├── index.html
-├── login.php
-├── auth_callback.php
-├── home.php
-├── refresh_token.php
-├── logout.php
-├── config.php
-├── lib_client_assertion.php
-├── safe_diagnostics.php
-├── error.html
-├── style.css
-└── logs/
-├── debug.log
-└── login_audit.log
+<img width="512" height="768" alt="Directory_structure" src="https://github.com/user-attachments/assets/7796cbed-a531-4f0d-aba3-55d36cd558e1" />
 
 ## Authentication lifecycle:
  login.php → start Entra sign-in
@@ -60,19 +45,10 @@ Implements modern OAuth 2.0 authorization with certificate-based client assertio
  home.php → secure user area
  refresh_token.php → keep tokens valid
  logout.php → safely terminate session
+ 
+<img width="768" height="512" alt="Authentication Flow" src="https://github.com/user-attachments/assets/2d473488-eed6-4c24-afa1-162e1f27a80a" />
 
-index.html → login.php → Microsoft Entra ID
-                               ↓
-                        auth_callback.php
-                               ↓
-                            home.php
-                               ↓
-                ┌──────────────┬────────────────┐
-                │              │                │
-         refresh_token.php  logout.php    (Authenticated user zone)
-          (token refresh)  (session end)
-
-================================================================================================
+====================
 
 ## Example Deployment
 1. Configure app registration in Entra ID 
@@ -83,7 +59,7 @@ index.html → login.php → Microsoft Entra ID
 6. Sign in → redirected to home.php.
 7. Logout → redirected to Microsoft logout → returns to portal login page.
 
-================================================================================================
+====================
 
 ## Microsoft Entra Setup
 
@@ -102,10 +78,9 @@ index.html → login.php → Microsoft Entra ID
 	openssl pkcs12 -in private.pfx -out privatekey.pem -nocerts -nodes
 6. Store privatekey.pem and public.cer in /entra_cert/
 
-================================================================================================
+====================
 
 ## Requirements
-| ------------------- | ---------------------------------------------- |
 | Component           | Version / Requirement                          |
 | ------------------- | ---------------------------------------------- |
 | PHP                 | 8.1+                                           |
@@ -114,9 +89,8 @@ index.html → login.php → Microsoft Entra ID
 | Microsoft Entra App | Single-tenant, v2.0 endpoints                  |
 | File permissions    | `/logs/` writable by PHP (for debug and audit) |
 
-================================================================================================
-INDIVIDUAL FILE BREAKDOWN
-================================================================================================
+====================
+## INDIVIDUAL FILE BREAKDOWN
 
 index.html
 Purpose: Login landing page
@@ -132,7 +106,6 @@ DESIGN NOTES:
  - Delegates authentication entirely to Microsoft (no credentials handled here).
  
 Summary of What This File Does
-| --------------- | -------------------------------------------------------- |
 | Section         | Description                                              |
 | --------------- | -------------------------------------------------------- |
 | Logo & Branding | Reinforces portal identity and trust                     |
@@ -140,7 +113,7 @@ Summary of What This File Does
 | Sign-in Button  | Initiates the OAuth 2.0 flow by linking to login.php     |
 | No Credentials  | Page never handles usernames or passwords directly       |
 
-================================================================================================
+====================
 
 login.php
 Purpose: Initiate the Microsoft Entra ID OAuth 2.0 Authorization Request
@@ -160,7 +133,6 @@ SECURITY NOTES:
  - Always served over HTTPS.
  
 Summary of Parameters Sent to Microsoft
-| ------------- | ------------------------------------------------------------------- |
 | Parameter     | Description                                                         |
 | ------------- | ------------------------------------------------------------------- |
 | client_id     | Identifies your app registration in Entra ID                        |
@@ -170,7 +142,7 @@ Summary of Parameters Sent to Microsoft
 | scope         | Defines which identity information and permissions the app needs    |
 | state         | Randomly generated string to prevent CSRF and replay attacks        |
 
-================================================================================================
+====================
 
 auth_callback.php
 Purpose: Handles the OAuth 2.0 Authorization Code Callback for Microsoft Entra ID
@@ -192,7 +164,6 @@ FLOW SUMMARY:
 6. Redirect securely to the authenticated home page.
  
 Summary of What This File Controls
-| -----------------| ------------------------------------------------------------ |
 | Section          | Purpose                                                      |
 | -----------------| ------------------------------------------------------------ |
 | Session          | Makes sure PHP can store login data securely                 |
@@ -204,7 +175,7 @@ Summary of What This File Controls
 | Store Session    | Saves user/tokens to $_SESSION for use in home.php           |
 | Redirect         | Sends the user to their authenticated home page              |
 
-================================================================================================
+====================
 
 config.php
 Purpose: Central configuration and session management for Logon Entra Portal
@@ -223,7 +194,6 @@ SECURITY NOTES:
 - Always deploy over HTTPS (never HTTP).
 
 Summary of What This File Controls
-| ------------------- | ------------------------------------------------------------------- |
 | Section             | Description                                                         |
 | ------------------- | ------------------------------------------------------------------- |
 | Entra Configuration | Core tenant/app settings and endpoints used by OAuth 2.0            |
@@ -232,7 +202,7 @@ Summary of What This File Controls
 | Timeout Management  | Enforces 2-hour inactivity logout to mitigate session hijacking     |
 | Audit Logging       | Logs login/logout/refresh events for monitoring and security review |
 
-================================================================================================
+====================
 
 home.php
 Purpose: Authenticated landing page for Logon Entra Portal
@@ -246,7 +216,6 @@ SECURITY NOTES:
 - Includes client-side token refresh every 5 minutes to avoid expiry.
 
 Summary of What This File Controls
-| ------------------ | ------------------------------------------------------------------ |
 | Section            | Function                                                           |
 | ------------------ | ------------------------------------------------------------------ |
 | Session Validation | Ensures user must be logged in to view the page.                   |
@@ -254,7 +223,7 @@ Summary of What This File Controls
 | User Display       | Shows name and preferred_username claims from Entra ID token.      |
 | Logout             | Provides a link to terminate the current session.                  |
 
-================================================================================================
+====================
 
 logout.php
 Purpose: Terminate user session and log logout event
@@ -272,14 +241,13 @@ SECURITY NOTES:
  - No user data should persist beyond this script’s execution.
  
 Summary of Actions
-| --------------| ------------------------------------ | ------------------------------------- |
 | Step          | Function                             | Reason                                |
 | --------------| ------------------------------------ | ------------------------------------- |
 | Audit Log     | Records who logged out and when      | Enables security traceability         |
 | Session Clear | Deletes all server-side session data | Prevents residual access              |
 | Redirect      | Returns user to login page           | Clean UX and prevents back navigation |
 
-================================================================================================
+====================
 
 lib_client_assertion.php
 Purpose: Generate a signed JWT "client assertion" for certificate-based OAuth 2.0 authentication
@@ -302,7 +270,6 @@ SECURITY NOTES:
  - Both files must match the certificate uploaded in Azure Portal.
  
 Summary of Key Operations
-| ------------------- | ------------------------------------------------------------ | ----------------|
 | Stage               | Purpose                                                      | Output          |
 | ------------------- | ------------------------------------------------------------ | ----------------|
 | Load Certificate    | Reads and normalizes public certificate to DER binary        | $certDer        |
@@ -317,7 +284,7 @@ Security Recommendations
  - Rotate certificates annually (your PowerShell renewal script automates this).
  - Verify certificate thumbprint matches the one visible in Azure Portal → Certificates & Secrets.
 
-================================================================================================
+====================
 
 refresh_token.php
 Purpose: Safely renew Microsoft Entra access tokens using a refresh token
@@ -339,7 +306,6 @@ SECURITY NOTES:
  - Must be accessed over HTTPS.
  
 Summary of Key Stages
-| -----------------------| ---------------------------------------------------- |
 | Step                   | Function                                             |
 | -----------------------| ---------------------------------------------------- |
 | Validate Refresh Token | Ensures a refresh token exists in the session        |
@@ -349,7 +315,7 @@ Summary of Key Stages
 | Send HTTPS Request     | Executes secure call to /token endpoint              |
 | Handle Response        | Updates stored tokens or logs error if refresh fails |
 
-================================================================================================
+====================
 
 safe_diagnostics.php
 Purpose: Unified diagnostics, logging, and safe execution handler
@@ -359,13 +325,12 @@ SECURITY NOTES:
  - Full internal logs stored in /logs/debug.log.
  - Debug visibility controlled via constants or flag file.
  
-| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------|
 | Section                             | Purpose / Behavior                                                                                                                            |
 | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------|
 | Global Constants                    | Defines runtime diagnostics behavior: enables debug output, whitelists dev IPs, sets log file path.                                           |
 | secure_log()                        | Safely writes messages and context to /logs/debug.log. Automatically filters sensitive keywords (secret, key, cert, token, password).         |
 | debug_show()                        | Displays green-on-black debug info *only* if DEBUG_ENABLED = true or user IP is whitelisted. Also calls secure_log() to persist same message. |
-| safe_exec()                         | Executes a function in a protected try/catch. Logs all exceptions, prevents leaks, and triggers friendly redirect to error page.              |
+| safe_exec()                         | Executes a function in a protected try/catch. Logs all exceptions, prevents leaks, and triggers a friendly redirect to the error page.        |
 | Redirect Logic (inside safe_exec()) | Handles graceful user experience after errors: tries HTTP 302 first, then <meta> and JavaScript fallback.                                     |
 | Global Error Handler                | Catches PHP warnings and errors not handled elsewhere. Logs them and optionally displays a minimal warning box in developer mode.             |
 | Global Exception Handler            | Catches all uncaught exceptions. Logs details (type, message, file, line, stack trace). In debug mode, displays minimal exception message.    |
@@ -374,7 +339,7 @@ SECURITY NOTES:
 | Optional Flag File Check            | Enables debug output automatically if /entra_cert/DEBUG_ON exists — no code changes needed.                                                   |
 
 
-================================================================================================
+====================
 
 error.html
 Purpose: Error redirection page for the Entra ID Portal
@@ -383,7 +348,7 @@ OVERVIEW:
  This page is the error landing screen that users see if they are authenticating
  encounters an error during the sign-in process.
 
-================================================================================================
+====================
 
 style.css
 Purpose: Core visual styles for Logon Entra Secure Login Portal
@@ -400,7 +365,6 @@ UX NOTES:
  - Rounded corners and shadows provide visual hierarchy.
  
 Summary of Design Intent
-| ---------------------- | ----------------------------------------------------------------------- |
 | Area                   | Purpose                                                                 |
 | ---------------------- | ----------------------------------------------------------------------- |
 | Flexbox layout         | Keeps content vertically & horizontally centered regardless of viewport |
@@ -411,12 +375,10 @@ Summary of Design Intent
 | Hover transition       | Provides modern interaction feedback                                    |
 | Optional focus outline | Helps users navigating via keyboard                                     |
 
-================================================================================================
 END - INDIVIDUAL FILE BREAKDOWN
-================================================================================================
+====================
 
 ## Debugging Tips
-| ---------------------------- | ---------------------------------- | ------------------------------------------- |
 | Symptom                      | Likely Cause                       | Resolution                                  |
 | ---------------------------- | ---------------------------------- | ------------------------------------------- |
 | White screen                 | Output before header redirect      | Check safe_diagnostics.php redirect block   |
@@ -424,6 +386,13 @@ END - INDIVIDUAL FILE BREAKDOWN
 | No redirect after error      | Headers already sent               | Remove whitespace before <?php              |
 | Still logged in after logout | Browser Entra session cached       | Test in incognito/private mode              |
 
-================================================================================================
+====================
 
-
+Logon Example <br>
+<img width="448" height="424" alt="Landing" src="https://github.com/user-attachments/assets/65f958ae-966c-4109-a600-e46be55a6dac" />
+<br>
+<img width="458" height="459" alt="Sign In" src="https://github.com/user-attachments/assets/9d626b56-e81d-4b4a-a93c-611e9ca9daf0" />
+<br>
+<img width="455" height="458" alt="Authentication" src="https://github.com/user-attachments/assets/fa3aa5af-87d9-4cd6-9d14-a5ff4c251336" />
+<br>
+<img width="444" height="363" alt="Restricted Area" src="https://github.com/user-attachments/assets/47b1f430-71ba-440c-939c-dc6eec64ae0b" />
